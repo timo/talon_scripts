@@ -1,5 +1,5 @@
 from talon import Context, Module, app, clip, cron, imgui, actions, ui
-from .keys import default_alphabet, letters_string
+from ...knausj_talon.code.keys import default_alphabet, letters_string
 
 from subprocess import run
 from math import log, ceil
