@@ -15,6 +15,9 @@ shimmer_effect_duration = mod.setting("grid_shimmer_effect_duration", type=float
 shimmer_effect_pause = mod.setting("grid_shimmer_effect_pause", type=float, default=420,
         desc="""How long should it take for the shimmer effect to come back.""")
 
+narrow_expansion = mod.setting("grid_narrow_expansion", type=int, default=0,
+        desc="""After narrowing, grow the new region by this many pixels in every direction, to make things immediately on edges easier to hit, and when the grid is at its smallest, it allows you to still nudge it around""")
+
 ctx = Context()
 
 class MouseSnapNine:
@@ -192,14 +195,15 @@ class MouseSnapNine:
             draw_text(self.offset_x, self.offset_y, self.width, self.height)
 
     def calc_narrow(self, which, offset_x, offset_y, width, height):
+        bdr = narrow_expansion .get()
         row = int(which - 1) // 3
         col = int(which - 1) % 3
-        offset_x += int(col * width // 3) - 5
-        offset_y += int(row * height // 3) - 5
+        offset_x += int(col * width // 3) - bdr
+        offset_y += int(row * height // 3) - bdr
         width //= 3
         height //= 3
-        width += 10
-        height += 10
+        width += bdr * 2
+        height += bdr * 2
         return [offset_x, offset_y, width, height]
 
 
