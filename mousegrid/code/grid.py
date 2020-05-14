@@ -169,12 +169,14 @@ class MouseSnapNine:
 
 
         def draw_text(offset_x, offset_y, width, height):
+            canvas.paint.text_align = canvas.paint.TextAlign.CENTER
             for row in range(3):
                 for col in range(3):
-                    canvas.draw_text(
-                        f"{row*3+col+1}",
+                    text_string = f"{row*3+col+1}";
+                    text_rect = canvas.paint.measure_text(text_string)[1]
+                    canvas.draw_text(text_string,
                         offset_x + width / 6 + col * width / 3,
-                        offset_y + height / 6 + row * height / 3,
+                        offset_y + height / 6 + row * height / 3 + text_rect.height / 2,
                     )
 
         if self.count < 2:
