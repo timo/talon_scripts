@@ -1,7 +1,17 @@
 tag: user.grid
 -
 <number>:
-    user.grid_narrow_many(number)
+    user.grid_narrow(number)
 
-grid finish:
+grid off:
+    user.grid_close()
+
+grid:
+    user.grid_reset()
+
+back:
+    user.grid_go_back()
+    
+click:
+    mouse_click(0)
     user.grid_close()

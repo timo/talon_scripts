@@ -1,4 +1,8 @@
-grid:
+M grid:
+    user.grid_activate()
+
+grid win:
+    user.grid_place_window()
     user.grid_activate()
 
 grid <number>+:

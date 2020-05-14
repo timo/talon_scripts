@@ -132,6 +132,8 @@ class MouseSnapNine:
                 # offset_y + 2 * height // 3,
             # )
 
+        grid_stroke = 1
+
         if not self.active:
             if time.time() % 240 < 10:
                 alpha = "60"
@@ -145,6 +147,8 @@ class MouseSnapNine:
                         ["00000000", "ff0000" + alpha, "0000ff" + alpha, "00ff00" + alpha, "00000000"],
                         stops,
                         Shader.TileMode.CLAMP)
+                grid_stroke = 6
+                paint.stroke_width = 1
             else:
                 return
 
@@ -166,6 +170,7 @@ class MouseSnapNine:
                     gap = 45
                 draw_crosses(*self.calc_narrow(which, self.offset_x, self.offset_y, self.width, self.height))
 
+        paint.stroke_width = grid_stroke
         if self.active:
             paint.color = "ff0000ff"
         else:
@@ -236,6 +241,17 @@ class MouseSnapNine:
 
         return _reset
 
+    def reset_to_current_window(self):
+        win = ui.active_window()
+        rect = win.rect
+
+        self.offset_x = rect.x
+        self.offset_y = rect.y
+        self.width = rect.width
+        self.height = rect.height
+
+        self.count = 0
+
     def narrow_to_pos(self, x, y):
         col_size = int(self.width // 3)
         row_size = int(self.height // 3)
@@ -261,13 +277,17 @@ class GridActions:
         ctx.tags = ["user.grid"]
         mg.start()
 
+    def grid_place_window():
+        """Places the grid on the currently active window"""
+        mg.reset_to_current_window()
+
     def grid_reset():
         """Resets the grid to fill the whole screen again"""
         mg.reset()(None)
 
     def grid_select_screen(screen: int):
         """Brings up a/the grid (mouse grid or otherwise)"""
-        mg.reset(screen)(None)
+        mg.reset(screen - 1)(None)
         mg.start()
 
     def grid_narrow_list(digit: typing.List[int]):
