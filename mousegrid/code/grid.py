@@ -1,4 +1,4 @@
-from talon import Module, Context, app, canvas, ui, ctrl
+from talon import Module, Context, app, canvas, ui, ctrl, cron
 from talon.skia import Shader, Color
 from talon_plugins import eye_mouse, eye_zoom_mouse
 
@@ -7,6 +7,13 @@ import math, time
 import typing
 
 mod = Module()
+
+shimmer_effect_enabled = mod.setting("grid_shimmer_effect_enabled", type=bool, default=True,
+        desc="""Enable the "shimmer effect" that regularly displays a faint hint of the first two layers of the 3x3 grid.""")
+shimmer_effect_duration = mod.setting("grid_shimmer_effect_duration", type=float, default=10,
+        desc="""How long should the shimmer effect take to pass across the screen.""")
+shimmer_effect_pause = mod.setting("grid_shimmer_effect_pause", type=float, default=420,
+        desc="""How long should it take for the shimmer effect to come back.""")
 
 ctx = Context()
 
@@ -53,7 +60,8 @@ class MouseSnapNine:
         self.active = True
 
     def stop(self, *_):
-        # self.mcanvas.unregister("draw", self.draw)
+        if not shimmer_effect_enabled.get():
+            self.mcanvas.unregister("draw", self.draw)
         self.active = False
         if self.was_eye_tracking and not eye_mouse.control_mouse.enabled:
             eye_mouse.control_mouse.toggle()
@@ -134,11 +142,13 @@ class MouseSnapNine:
 
         grid_stroke = 1
 
-        if not self.active:
-            if time.time() % 240 < 10:
+        if not self.active and shimmer_effect_enabled.get():
+            remainder_time = time.time() % (shimmer_effect_duration.get() + shimmer_effect_pause.get()) 
+            if remainder_time < shimmer_effect_duration.get():
+                print(remainder_time)
                 alpha = "60"
-                animpos = (time.time() % 240) / 10
-                fromcnt = (animpos - 0.5) * 2
+                animpos = remainder_time / shimmer_effect_duration.get()
+                # fromcnt = (animpos - 0.5) * 2
                 stops = [animpos - 0.1, animpos - 0.05, animpos, animpos + 0.05, animpos + 0.1]
                 stops = list(map(lambda c: min(max(c, 0), 1), stops))
                 paint.shader = Shader.linear_gradient(
@@ -311,6 +321,9 @@ class GridActions:
         mg.reset()(None)
         mg.stop()
 
-
-mg.start()
-mg.stop()
+def check_shimmer_setting_at_startup():
+    if shimmer_effect_enabled.get():
+        mg.start()
+        mg.reset()
+        mg.stop()
+cron.after("100ms", check_shimmer_setting_at_startup)
