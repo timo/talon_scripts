@@ -14,6 +14,8 @@ shimmer_effect_duration = mod.setting("grid_shimmer_effect_duration", type=float
         desc="""How long should the shimmer effect take to pass across the screen.""")
 shimmer_effect_pause = mod.setting("grid_shimmer_effect_pause", type=float, default=420,
         desc="""How long should it take for the shimmer effect to come back.""")
+shimmer_effect_width = mod.setting("grid_shimmer_effect_stroke_width", type=float, default=1,
+        desc="""How thick should the grid lines be that show up during the shimmer effect.""")
 
 narrow_expansion = mod.setting("grid_narrow_expansion", type=int, default=0,
         desc="""After narrowing, grow the new region by this many pixels in every direction, to make things immediately on edges easier to hit, and when the grid is at its smallest, it allows you to still nudge it around""")
@@ -160,7 +162,7 @@ class MouseSnapNine:
                         ["00000000", "ff0000" + alpha, "0000ff" + alpha, "00ff00" + alpha, "00000000"],
                         stops,
                         Shader.TileMode.CLAMP)
-                grid_stroke = 6
+                grid_stroke = shimmer_effect_width.get()
                 paint.stroke_width = 1
             else:
                 return
