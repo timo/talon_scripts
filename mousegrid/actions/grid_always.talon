@@ -6,8 +6,8 @@ grid win:
     user.grid_activate()
 
 grid <number>+:
-    user.grid_narrow_list(number_list)
     user.grid_activate()
+    user.grid_narrow_list(number_list)
 
 grid screen <number>:
     user.grid_select_screen(number)
