@@ -8,7 +8,7 @@ import typing
 
 mod = Module()
 
-shimmer_effect_enabled = mod.setting("grid_shimmer_effect_enabled", type=bool, default=True,
+shimmer_effect_enabled = mod.setting("grid_shimmer_effect_enabled", type=bool, default=False,
         desc="""Enable the "shimmer effect" that regularly displays a faint hint of the first two layers of the 3x3 grid.""")
 shimmer_effect_duration = mod.setting("grid_shimmer_effect_duration", type=float, default=10,
         desc="""How long should the shimmer effect take to pass across the screen.""")
