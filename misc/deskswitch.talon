@@ -1,2 +1,2 @@
-switch desk <number>:
+desk <number> go:
     user.switch_desk("{number}")
