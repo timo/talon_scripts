@@ -10,4 +10,4 @@ app: PyCharm64.exe
 -
 match brace: user.idea("action EditorMatchBrace")
 
-jump character: user.idea("action com.gitlab.lae.intellij.jump.JumpToChar")
+jump: user.idea("action com.gitlab.lae.intellij.jump.JumpToChar")
