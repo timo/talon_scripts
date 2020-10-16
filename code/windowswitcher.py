@@ -32,7 +32,7 @@ def gui(gui: imgui.GUI):
         gui.line()
         gui.text("desktop {}".format(g))
         for win in groups[g]:
-            if gui.button("switch {}: {} ({})".format(window_spelling[index],win.title, win.app.name)):
+            if gui.button("{} switch: {} ({})".format(window_spelling[index],win.title, win.app.name)):
                 win.focus()
                 close_gui_and_drawing()
             index = index + 1
